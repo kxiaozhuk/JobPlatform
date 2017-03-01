@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.touchstone.dao.TriggerDao">
+    <resultMap type="com.touchstone.entity.TriggerInfo" id="TriggerResultMap">
+        <id property="trgId" column="trg_id" jdbcType="CHAR"/>
+        <result property="trgNm" column="trg_nm" jdbcType="VARCHAR"/>
+        <result property="creNm" column="cre_nm" jdbcType="VARCHAR"/>
+        <result property="creDt" column="cre_dt" jdbcType="TIMESTAMP"/>
+        <result property="runCycl" column="run_cycl" jdbcType="VARCHAR"/>
+        <result property="runDayTm" column="run_day_tm" jdbcType="TIME"/>
+        <result property="runDayWeek" column="run_day_week" jdbcType="TINYINT"/>
+        <result property="runDayMon" column="run_day_mon" jdbcType="TINYINT"/>
+        <result property="begnDt" column="begn_dt" jdbcType="DATE"/>
+        <result property="endDt" column="end_dt" jdbcType="DATE"/>
+        <result property="skipDt" column="skip_dt" jdbcType="DATE"/>
+        <result property="trgSts" column="trg_sts" jdbcType="TINYINT"/>
+        <result property="lstModNm" column="lst_mod_nm" jdbcType="VARCHAR"/>
+        <result property="lstModDt" column="lst_mod_dt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="selectTriggerByIf" parameterType="com.touchstone.entity.TriggerInfo" resultMap="TriggerResultMap">
+        select * from dwa_spark_trigger_info where 1=1
+        <if test="trgInfo.trgId !=null">
+            and trg_id=#{job.trgId}
+        </if>
+        <if test="trgInfo.creNm!=null">
+            and cre_nm=#{job.creNm}
+        </if>
+    </select>
+
+    <select id="countAllTrigger"  resultType="int">
+        select count(*) from dwa_spark_trigger_info
+    </select>
+    <!--   根据id查询对应的数据信息 -->
+    <select id="selectTriggerById" parameterType="String" resultMap="TriggerResultMap">
+        select * from dwa_spark_trigger_info where trg_id=#{trgId}
+    </select>
+    <!--    查询所有 数据 -->
+    <select id="selectAllTrigger" resultMap="TriggerResultMap">
+        select * from dwa_spark_trigger_info
+    </select>
+    <!-- 添加数据信息 -->
+    <insert id="insertTrigger" parameterType="com.touchstone.entity.TriggerInfo">
+        insert into  dwa_spark_trigger_info(trg_id,trg_nm,cre_nm,run_cycl,run_day_tm,run_day_week,run_day_mon,begn_dt,end_dt,skip_dt)
+        values (#{trgInfo.trgId},#{trgInfo.trgNm},#{trgInfo.creNm},#{trgInfo.runCycl},#{trgInfo.runDayTm},
+                 #{trgInfo.runDayWeek},#{trgInfo.runDayMon},#{trgInfo.begnDt},#{trgInfo.endDt},#{trgInfo.skipDt})
+    </insert>
+    <!-- 更新数据信息 -->
+    <update id="updateTrigger" parameterType="com.touchstone.entity.TriggerInfo">
+        update dwa_spark_trigger_info set trg_nm=#{trgInfo.trgNm},run_cycl=#{trgInfo.runCycl},run_day_tm=#{trgInfo.runDayTm},
+                run_day_week=#{trgInfo.runDayWeek},run_day_mon=#{trgInfo.runDayMon},begn_dt=#{trgInfo.begnDt},end_dt=#{trgInfo.endDt},skip_dt=#{trgInfo.skipDt}
+        where trg_id=#{trgInfo.trgId}
+    </update>
+    <!-- 删除数据信息 -->
+    <delete id="deleteTriggerById" parameterType="String">
+        delete from dwa_spark_trigger_info where trg_id=#{trgId}
+    </delete>
+</mapper>

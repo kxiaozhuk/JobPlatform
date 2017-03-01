@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="package" name="SparkJobPlatform">
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<property name="project_name" value="${ant.project.name}" />
+	<property name="project_web_dir" value="web" />
+	<property name="project_src_dir" value="src" />
+	<property name="project_build_dir" value="build" />
+	<property name="project_classes_dir" value="${project_build_dir}/classes" />
+	<property name="project_war" value="${project_build_dir}/dist/${project_name}.war" />
+	<property name="project_lib_dir" value="${project_web_dir}/WEB-INF/lib" />
+
+	<path id="project.classpath">
+		<pathelement location="${project_classes_dir}" />
+		<fileset dir="${project_lib_dir}" includes="*.jar" />
+	</path>
+
+	<target name="clean">
+		<delete dir="${project_build_dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${project_classes_dir}" />
+		<copy includeemptydirs="false" todir="${project_classes_dir}">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build" depends="init"  description="Compiling all java files in ${project_src_dir}">
+		<echo message="${project_name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${project_classes_dir}" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="project.classpath" />
+			<compilerarg line="-encoding UTF-8"/>
+		</javac>
+	</target>
+
+	<target name="package" depends="build" description="Packagign all files into ${project_war}">
+		<war destfile="${project_war}" index="true" needxmlfile="fasle">
+			<classes dir="${project_classes_dir}" />
+			<fileset dir="${project_web_dir}">
+				<exclude name="**/classes/*"/>
+				<include name="**/*.*" />
+			</fileset>
+		</war>
+	</target>
+</project>

@@ -1,0 +1,64 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spark作业管理平台</title>
+    <link th:href="@{bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet" />
+</head>
+<nav class="navbar navbar-default navbar-stacked" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index">Spark作业管理平台</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index">首页</a></li>
+                <li><a href="job/list">作业</a></li>
+                <li><a href="trigger/list">触发器</a></li>
+                <li><a href="#">设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<body>
+<div class="row">
+    <div class="panel panel-primary" th:if="${not #lists.isEmpty(jobCount)}" >
+        <div class="panel-heading">
+            <h3 class="panel-title">作业</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>作业状态</th>
+                    <th>个数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="jc:${jobCount}">
+                    <td th:switch="${jc.key}">
+                        <p th:case="0">定义完</p>
+                        <p th:case="3">运行中</p>
+                        <p th:case="-3">运行失败</p>
+                        <p th:case="4">运行完毕</p>
+                        <p th:case="-4">已停止</p>
+                    </td>
+                    <td th:text="${jc.value}">版本</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">触发器</h3>
+    </div>
+    <div class="panel-body">
+        <span th:text="${trgCount}"></span>
+    </div>
+</div>
+</div>
+<script th:src="@{jquery-3.1.1.js}" type="text/javascript"></script>
+<script th:src="@{bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+</body>
+</html>

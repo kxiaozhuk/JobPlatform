@@ -1,0 +1,254 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spark作业管理平台</title>
+    <link th:href="@{../../bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{../../bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet" />
+    <link th:href="@{../../bootstrap/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" />
+</head>
+<nav class="navbar navbar-default navbar-stacked" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Spark作业管理平台</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="../index">首页</a></li>
+                <li><a href="../job/list">作业</a></li>
+                <li class="active"><a href="list">触发器</a></li>
+                <li><a href="#">设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<body>
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label class="col-sm-1 control-label">触发器名称</label>
+        <div class="col-sm-2">
+            <input class="form-control" id="nameInput" type="text"  value="该输入触发器名称" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">运行周期</label>
+        <div class="col-sm-2 ">
+            <select class="form-control" id="runCycleSelect">
+                <option value="daily">每日</option>
+                <option value="weekly">每周</option>
+                <option value="monthly">每月</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">周期配置</label>
+        <div class="col-sm-2 ">
+            <select class="form-control" id="runDaySelect">
+                <option value="" text="请选择"></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">运行时间</label>
+        <div class="col-sm-2 input-group date" id="runDatetimepicker" data-link-field="runDtpInput" data-link-format="hh:ii:ss">
+            <input type='text' class="form-control input-sm" id="runDtpInput" readonly="readonly"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">开始运行日期</label>
+        <div class="col-sm-2 input-group date" id="beginDatetimepicker" data-link-field="beginDtpInput" data-link-format="yyyy-mm-dd">
+            <input type='text' class="form-control input-sm" id="beginDtpInput" readonly="readonly"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">结束运行日期</label>
+        <div class="col-sm-2 input-group date" id="endDatetimepicker" data-link-field="endDtpInput" data-link-format="yyyy-mm-dd">
+            <input type='text' class="form-control input-sm" id="endDtpInput" readonly="readonly"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-1 control-label">不运行日期</label>
+        <div class="col-sm-2 input-group date" id="skipDatetimepicker" date-date-format="dd MM yyyy" data-link-field="skipDtpInput" data-link-format="yyyy-mm-dd">
+            <input type='text' class="form-control input-sm" id="skipDtpInput" readonly="readonly"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div align="center" class="col-sm-2">
+            <button id="okBtn" onclick="saveJob()" type="button" class="btn btn-primary">保存</button>
+            <button id="cancelBtn" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">取消</button>
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" align="left">取消提示</h4>
+                        </div>
+                        <div class="modal-body" align="left">
+                            点击确认返回列表页，点击关闭回到当前页。
+                        </div>
+                        <div class="modal-footer">
+                            <a href="./list" class="btn btn-success">确认</a>
+                            <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+</form>
+<script th:src="@{../../jquery-3.1.1.js}" type="text/javascript"></script>
+<script th:src="@{../../bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script th:src="@{../../bootstrap/js/bootstrap-datetimepicker.min.js}" type="text/javascript"></script>
+<script th:src="@{../../bootstrap/js/locales/bootstrap-datetimepicker.zh-CN.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+    $(function () {
+        var runCycleSelect = $("#runCycleSelect");
+        var runDaySelect = $("#runDaySelect");
+        // 根据选择框变化显示删除按钮
+        runCycleSelect.on("change", function () {
+            var cycle = document.getElementById("runCycleSelect").value;
+            if(cycle == 'weekly')
+            {
+                runDaySelect.empty();
+                runDaySelect.append('<option value="1">周日</option>');
+                runDaySelect.append('<option value="2">周一</option>');
+                runDaySelect.append('<option value="3">周二</option>');
+                runDaySelect.append('<option value="4">周三</option>');
+                runDaySelect.append('<option value="5">周四</option>');
+                runDaySelect.append('<option value="6">周五</option>');
+                runDaySelect.append('<option value="7">周六</option>');
+            }else if(cycle == 'monthly')
+            {
+                runDaySelect.empty();
+                runDaySelect.append('<option value="1">1号</option>');
+                runDaySelect.append('<option value="2">2号</option>');
+                runDaySelect.append('<option value="3">3号</option>');
+                runDaySelect.append('<option value="4">4号</option>');
+                runDaySelect.append('<option value="5">5号</option>');
+                runDaySelect.append('<option value="6">6号</option>');
+                runDaySelect.append('<option value="7">7号</option>');
+                runDaySelect.append('<option value="8">8号</option>');
+                runDaySelect.append('<option value="9">9号</option>');
+                runDaySelect.append('<option value="10">10号</option>');
+                runDaySelect.append('<option value="11">11号</option>');
+                runDaySelect.append('<option value="12">12号</option>');
+                runDaySelect.append('<option value="13">13号</option>');
+                runDaySelect.append('<option value="14">14号</option>');
+                runDaySelect.append('<option value="15">15号</option>');
+                runDaySelect.append('<option value="16">16号</option>');
+                runDaySelect.append('<option value="17">17号</option>');
+                runDaySelect.append('<option value="18">18号</option>');
+                runDaySelect.append('<option value="19">19号</option>');
+                runDaySelect.append('<option value="20">20号</option>');
+                runDaySelect.append('<option value="21">21号</option>');
+                runDaySelect.append('<option value="22">22号</option>');
+                runDaySelect.append('<option value="23">23号</option>');
+                runDaySelect.append('<option value="24">24号</option>');
+                runDaySelect.append('<option value="25">25号</option>');
+                runDaySelect.append('<option value="26">26号</option>');
+                runDaySelect.append('<option value="27">27号</option>');
+                runDaySelect.append('<option value="28">28号</option>');
+                runDaySelect.append('<option value="29">29号</option>');
+                runDaySelect.append('<option value="30">30号</option>');
+                runDaySelect.append('<option value="31">31号</option>');
+            }else
+            {
+                runDaySelect.empty();
+            }
+        });
+        $('#runDatetimepicker').datetimepicker({
+            language:  'zh-CN',
+            autoclose: 1,
+            startView: 0,
+            minView: 0,
+            forceParse: 0
+        });
+        $('#beginDatetimepicker').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('#endDatetimepicker').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        $('#skipDatetimepicker').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0
+        });
+        //动态设置最小值
+        $('#beginDatetimepicker').on('dp.change', function (e) {
+            $('#endDatetimepicker').data('DateTimePicker').minDate(e.date);
+            $('#skipDatetimepicker').data('DateTimePicker').minDate(e.date);
+        });
+        //动态设置最大值
+        $('#endDatetimepicker').on('dp.change', function (e) {
+            $('#beginDatetimepicker').data('DateTimePicker').maxDate(e.date);
+            $('#skipDatetimepicker').data('DateTimePicker').maxDate(e.date);
+        });
+    });
+    function saveJob() {
+     var jsons = {};
+     jsons.trgNm = document.getElementById("nameInput").value;
+     jsons.runCycl = document.getElementById("runCycleSelect").value;
+     jsons.runDayTm = document.getElementById("runDtpInput").value;
+     if (jsons.runCycl == 'weekly'){
+         jsons.runDayWeek = document.getElementById("runDaySelect").value;
+     }
+     if (jsons.runCycl == 'monthly'){
+         jsons.runDayMon = document.getElementById("runDaySelect").value;
+     }
+     jsons.begnDt = document.getElementById("beginDtpInput").value;
+     jsons.endDt = document.getElementById("endDtpInput").value;
+     jsons.skipDt = document.getElementById("skipDtpInput").value;
+     jsons.creNm = "zwh";
+
+     $.ajax({
+         method: "POST",
+         url: "/trigger/create/",
+         contentType: "application/json",
+         data: JSON.stringify(jsons),
+         dataType: "json",
+         success: function(ret) {
+             //console.log(ret);
+             if(ret.success) {
+                 alert(ret.msg);
+                 window.location.href="/trigger/list"; //页面重载
+             }else {
+                 alert(ret.msg);
+             }
+         },
+         error: function(ret) {
+             //console.log(ret);
+             alert("服务不可用，稍后再试");
+         }
+     });
+ }
+</script>
+</body>
+</html>

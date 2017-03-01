@@ -1,0 +1,127 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Spark作业管理平台</title>
+    <link th:href="@{../../bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{../../bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet" />
+    <script th:src="@{../../jquery-3.1.1.js}" type="text/javascript"></script>
+    <script th:src="@{../../bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+</head>
+<nav class="navbar navbar-default navbar-stacked" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Spark作业管理平台</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="../index">首页</a></li>
+                <li><a href="../job/list">作业</a></li>
+                <li class="active"><a href="list">触发器</a></li>
+                <li><a href="#">设置</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<body>
+<div class="row demo-row btns">
+    <div class="col-xs-1">
+        <a href="add" class="btn btn-primary addBtn">
+            <span class="glyphicon glyphicon-plus-sign"></span> 新建
+        </a>
+    </div>
+    <div class="del col-xs-1 hide">
+        <a href="javascript:;" class="btn btn-danger delBtn">
+            <span class="glyphicon glyphicon-minus-sign"></span> 删除
+        </a>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">触发器列表</div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>触发器名称</th>
+            <th>创建者</th>
+            <th>创建日期</th>
+            <th>运行周期</th>
+            <th>运行时间</th>
+            <th>开始运行日期</th>
+            <th>结束运行日期</th>
+            <th>不运行日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="trg:${trgList}">
+            <td><input type="checkbox" name="trgcb1" th:id="${trg.trgId}"/></td>
+            <td th:text="${trg.trgNm}">触发器名称</td>
+            <td th:text="${trg.creNm}">创建者</td>
+            <td th:text="${trg.creDt}">创建日期</td>
+            <td th:switch="${trg.runCycl}">
+                <p th:case="daily">每日</p>
+                <p th:case="weekly" th:text="${trg.runDayWeek==1}? '每周日':(${trg.runDayWeek==2}? '每周一':(${trg.runDayWeek==3}? '每周二':(${trg.runDayWeek==4}? '每周三':(${trg.runDayWeek==5}? '每周四':(${trg.runDayWeek==6}? '每周五':每周六)))))"></p>
+                <p th:case="monthly" th:text="'每月'+${trg.runDayMon}+'号'"></p>
+                <p th:case="*">无</p>
+            </td>
+            <td th:text="${trg.runDayTm}">运行时间</td>
+            <td th:text="${trg.begnDt}">开始运行日期</td>
+            <td th:text="${trg.endDt}">结束运行日期</td>
+            <td th:text="${trg.skipDt}">不运行日期</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <a class="detailBtn btn btn-info" th:href="@{'../trigger/'+${trg.trgId}+'/detail'}" th:id="${trg.trgId}">
+                        <span class="glyphicon glyphicon-eye-open"></span> 详情
+                    </a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:inline="javascript">
+    $(function(){
+        // 根据选择框变化显示删除按钮
+        $("input[type='checkbox']").on("change", function () {
+            var len = $("input:checked").length;
+            var del = $(".del");
+            if(len > 0){
+                del.removeClass("hide");
+            }else {
+                del.addClass("hide");
+            }
+        });
+        // 删除按钮异步调用功能
+        $(".delBtn").on("click", function () {
+            var dsList = $("input[type=checkbox]:checked");
+            var ids = new Array();
+            $.each(dsList, function(idx, ele){
+                ids.push($(ele).attr("id"));
+            });
+
+            $.ajax({
+                method: "POST",
+                url: "/trigger/delete",
+                contentType: "application/json",
+                data: JSON.stringify(ids),
+                dataType: "json",
+                success: function(ret) {
+                    //console.log(ret);
+                    if(ret.success) {
+                        alert(ret.msg);
+                        window.location.href="/trigger/list"; //页面重载
+                    }else {
+                        alert(ret.msg);
+                    }
+                },
+                error: function(ret) {
+                    //console.log(ret);
+                    alert("服务不可用，稍后再试");
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
