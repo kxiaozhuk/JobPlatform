@@ -22,6 +22,7 @@ create table dwadb.dwa_spark_job_info
   trg_id char(32) NOT NULL DEFAULT '' COMMENT '触发器ID',
   lst_mod_nm varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改者',
   lst_mod_dt timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后修改日期',
+  log_path varchar(500) NOT NULL DEFAULT '' COMMENT '日志路径',
    primary key (job_id)
 );
 
@@ -44,7 +45,7 @@ create table dwadb.dwa_spark_trigger_info
   run_day_mon tinyint(4) NOT NULL DEFAULT '0' COMMENT '每月几号运行',
   begn_dt date NOT NULL DEFAULT '0000-00-00' COMMENT '开始运行日期',
   end_dt date NOT NULL DEFAULT '9999-12-31' COMMENT '结束运行日期',
-  skip_dt date NOT NULL DEFAULT '1970-01-01' COMMENT '不运行日期',
+  skip_dt date NULL DEFAULT NULL COMMENT '不运行日期',
   trg_sts tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
   lst_mod_nm varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改者',
   lst_mod_dt timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后修改日期',

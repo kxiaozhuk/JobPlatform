@@ -58,7 +58,7 @@
     <div class="form-group">
         <label class="col-sm-1 control-label">运行时间</label>
         <div class="col-sm-2 input-group date" id="runDatetimepicker" data-link-field="runDtpInput" data-link-format="hh:ii:ss">
-            <input type='text' class="form-control input-sm" id="runDtpInput" readonly="readonly" th:value="${trgInfo.runDayTm}"/>
+            <input type='text' class="form-control input-sm" id="runDtpInput" readonly="readonly" th:value="${trgInfo.begnDt + ' ' + trgInfo.runDayTm}"/>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
         </div>
@@ -103,7 +103,7 @@
                             请确认是否更新触发器信息？ 点击关闭放弃修改
                         </div>
                         <div class="modal-footer">
-                            <button onclick="updateTrigger()" type="button" class="btn btn-success">确认</button>
+                            <button onclick="updateTrigger()" type="button" class="btn btn-success" data-dismiss="modal">确认</button>
                             <a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
                         </div>
                     </div><!-- /.modal-content -->
@@ -222,6 +222,7 @@
     });
     function updateTrigger() {
      var jsons = {};
+     jsons.trgId = document.getElementById("idInput").value;
      jsons.trgNm = document.getElementById("nameInput").value;
      jsons.runCycl = document.getElementById("runCycleSelect").value;
      jsons.runDayTm = document.getElementById("runDtpInput").value;

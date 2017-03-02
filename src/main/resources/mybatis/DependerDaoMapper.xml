@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper  namespace="com.touchstone.dao.DependerDao">
-    <resultMap type="com.touchstone.entity.JobDepender" id="dependerResultMap">
+<mapper  namespace="com.springboot.dao.DependerDao">
+    <resultMap type="com.springboot.entity.JobDepender" id="dependerResultMap">
         <id property="jobId" column="job_id" jdbcType="CHAR"/>
         <result property="depJid" column="dep_jid" jdbcType="VARCHAR"/>
         <result property="creNm" column="cre_nm" jdbcType="VARCHAR"/>
@@ -25,12 +25,12 @@
         select * from dwa_spark_job_depender
     </select>
     <!-- 添加数据信息 -->
-    <insert id="insertDepender" parameterType="com.touchstone.entity.JobDepender">
+    <insert id="insertDepender" parameterType="com.springboot.entity.JobDepender">
         insert into  dwa_spark_job_depender(job_id,dep_jid,cre_nm,dep_sts,skip_ind)
         values (#{jobDep.jobId},#{jobDep.depJid},#{jobDep.creNm},#{jobDep.depSts},#{jobDep.skipInd}}
     </insert>
     <!-- 更新数据信息 -->
-    <update id="updateDepender" parameterType="com.touchstone.entity.JobDepender">
+    <update id="updateDepender" parameterType="com.springboot.entity.JobDepender">
         update dwa_spark_job_depender set dep_jid=#{jobDep.depJid},dep_sts=#{jobDep.depSts},skip_ind=#{jobDep.skipInd},lst_mod_nm=#{jobDep.lstModNm},lst_mod_dt=#{jobDep.lstModDt}
         where job_id=#{jobDep.jobId}
     </update>

@@ -25,13 +25,13 @@
 <form class="form-horizontal" role="form">
     <div class="form-group">
         <label class="col-sm-1 control-label">触发器名称</label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <input class="form-control" id="nameInput" type="text"  value="该输入触发器名称" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">运行周期</label>
-        <div class="col-sm-2 ">
+        <div class="col-sm-3 ">
             <select class="form-control" id="runCycleSelect">
                 <option value="daily">每日</option>
                 <option value="weekly">每周</option>
@@ -41,7 +41,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">周期配置</label>
-        <div class="col-sm-2 ">
+        <div class="col-sm-3 ">
             <select class="form-control" id="runDaySelect">
                 <option value="" text="请选择"></option>
             </select>
@@ -49,7 +49,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">运行时间</label>
-        <div class="col-sm-2 input-group date" id="runDatetimepicker" data-link-field="runDtpInput" data-link-format="hh:ii:ss">
+        <div class="col-sm-3 input-group date" id="runDatetimepicker" data-link-field="runDtpInput" data-link-format="hh:ii:ss">
             <input type='text' class="form-control input-sm" id="runDtpInput" readonly="readonly"/>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -57,7 +57,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">开始运行日期</label>
-        <div class="col-sm-2 input-group date" id="beginDatetimepicker" data-link-field="beginDtpInput" data-link-format="yyyy-mm-dd">
+        <div class="col-sm-3 input-group date" id="beginDatetimepicker" data-link-field="beginDtpInput" data-link-format="yyyy-mm-dd">
             <input type='text' class="form-control input-sm" id="beginDtpInput" readonly="readonly"/>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -65,7 +65,7 @@
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">结束运行日期</label>
-        <div class="col-sm-2 input-group date" id="endDatetimepicker" data-link-field="endDtpInput" data-link-format="yyyy-mm-dd">
+        <div class="col-sm-3 input-group date" id="endDatetimepicker" data-link-field="endDtpInput" data-link-format="yyyy-mm-dd">
             <input type='text' class="form-control input-sm" id="endDtpInput" readonly="readonly"/>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -73,14 +73,14 @@
     </div>
     <div class="form-group">
         <label class="col-sm-1 control-label">不运行日期</label>
-        <div class="col-sm-2 input-group date" id="skipDatetimepicker" date-date-format="dd MM yyyy" data-link-field="skipDtpInput" data-link-format="yyyy-mm-dd">
+        <div class="col-sm-3 input-group date" id="skipDatetimepicker" date-date-format="dd MM yyyy" data-link-field="skipDtpInput" data-link-format="yyyy-mm-dd">
             <input type='text' class="form-control input-sm" id="skipDtpInput" readonly="readonly"/>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
         </div>
     </div>
     <div class="form-group">
-        <div align="center" class="col-sm-2">
+        <div align="center" class="col-sm-3">
             <button id="okBtn" onclick="saveJob()" type="button" class="btn btn-primary">保存</button>
             <button id="cancelBtn" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">取消</button>
             <!-- 模态框（Modal） -->
