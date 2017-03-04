@@ -15,30 +15,30 @@
     </resultMap>
     <!--   根据id查询对应的数据信息 -->
     <select id="selectDependerByJob" parameterType="String" resultMap="dependerResultMap">
-        select * from dwa_spark_job_depender where job_id=#{jobId}
+        select * from tab_job_depender where job_id=#{jobId}
     </select>
     <select id="selectJobByDepender" parameterType="String" resultMap="dependerResultMap">
-        select * from dwa_spark_job_depender where dep_jid=#{depJId}
+        select * from tab_job_depender where dep_jid=#{depJId}
     </select>
     <!--    查询所有 数据 -->
     <select id="selectAllDepender" resultMap="dependerResultMap">
-        select * from dwa_spark_job_depender
+        select * from tab_job_depender
     </select>
     <!-- 添加数据信息 -->
     <insert id="insertDepender" parameterType="com.grouptech.entity.JobDepender">
-        insert into  dwa_spark_job_depender(job_id,dep_jid,cre_nm,dep_sts,skip_ind)
+        insert into  tab_job_depender(job_id,dep_jid,cre_nm,dep_sts,skip_ind)
         values (#{jobDep.jobId},#{jobDep.depJid},#{jobDep.creNm},#{jobDep.depSts},#{jobDep.skipInd}}
     </insert>
     <!-- 更新数据信息 -->
     <update id="updateDepender" parameterType="com.grouptech.entity.JobDepender">
-        update dwa_spark_job_depender set dep_jid=#{jobDep.depJid},dep_sts=#{jobDep.depSts},skip_ind=#{jobDep.skipInd},lst_mod_nm=#{jobDep.lstModNm},lst_mod_dt=#{jobDep.lstModDt}
+        update tab_job_depender set dep_jid=#{jobDep.depJid},dep_sts=#{jobDep.depSts},skip_ind=#{jobDep.skipInd},lst_mod_nm=#{jobDep.lstModNm},lst_mod_dt=#{jobDep.lstModDt}
         where job_id=#{jobDep.jobId}
     </update>
     <!-- 删除数据信息 -->
     <delete id="deleteByJob" parameterType="String">
-        delete from dwa_spark_job_depender where job_id=#{jobId}
+        delete from tab_job_depender where job_id=#{jobId}
     </delete>
     <delete id="deleteByDepender" parameterType="String">
-        delete from dwa_spark_job_depender where dep_jid=#{depJId}
+        delete from tab_job_depender where dep_jid=#{depJId}
     </delete>
 </mapper>

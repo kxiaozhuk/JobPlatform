@@ -1,15 +1,15 @@
-drop table if exists dwadb.dwa_spark_job_info;
+drop table if exists tab_job_info;
 
 /*==============================================================*/
 /* Table: job_info                                              */
 /*==============================================================*/
-create table dwadb.dwa_spark_job_info
+create table tab_job_info
 (
   job_id char(32) NOT NULL DEFAULT '' COMMENT '作业ID',
   job_nm varchar(100) NOT NULL DEFAULT '' COMMENT '作业名称',
   cre_nm varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
   cre_dt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  job_typ varchar(10) NOT NULL DEFAULT '' COMMENT '作业类型',
+  job_typ varchar(10) NOT NULL DEFAULT '' COMMENT '作业类型 0:spark,1:jar,2:script',
   job_ver varchar(10) NOT NULL DEFAULT '' COMMENT '作业版本',
   jar_path varchar(500) NOT NULL DEFAULT '' COMMENT 'JAR路径',
   spark_mode varchar(20) NOT NULL DEFAULT '' COMMENT 'spark运行模式',
@@ -26,14 +26,14 @@ create table dwadb.dwa_spark_job_info
    primary key (job_id)
 );
 
-alter table dwadb.dwa_spark_job_info comment 'Spark作业信息表';
+alter table tab_job_info comment '作业信息表';
 
-drop table if exists dwadb.dwa_spark_trigger_info;
+drop table if exists tab_trigger_info;
 
 /*==============================================================*/
 /* Table: job_info                                              */
 /*==============================================================*/
-create table dwadb.dwa_spark_trigger_info
+create table tab_trigger_info
 (
   trg_id char(32) NOT NULL DEFAULT '' COMMENT '触发器ID',
   trg_nm varchar(100) NOT NULL DEFAULT '' COMMENT '触发器名称',
@@ -52,14 +52,14 @@ create table dwadb.dwa_spark_trigger_info
    primary key (trg_id)
 );
 
-alter table dwadb.dwa_spark_trigger_info comment 'Spark触发器信息表';
+alter table tab_trigger_info comment '触发器信息表';
 
-drop table if exists dwadb.dwa_spark_job_depender;
+drop table if exists tab_job_depender;
 
 /*==============================================================*/
 /* Table: job_info                                              */
 /*==============================================================*/
-create table dwadb.dwa_spark_job_depender
+create table tab_job_depender
 (
   job_id char(32) NOT NULL DEFAULT '' COMMENT '作业ID',
   dep_jid char(32) NOT NULL DEFAULT '' COMMENT '依赖作业ID',
@@ -72,26 +72,23 @@ create table dwadb.dwa_spark_job_depender
    primary key (job_id,dep_jid)
 );
 
-alter table dwadb.dwa_spark_job_depender comment 'Spark作业依赖表';
+alter table tab_job_depender comment '作业依赖表';
 
-drop table if exists dwadb.dwa_log_info;
+drop table if exists tab_log_info;
 
 /*==============================================================*/
 /* Table: log_info                                              */
 /*==============================================================*/
-create table dwadb.dwa_log_info
+create table tab_log_info
 (
-   id                   int not null auto_increment comment '����ID',
-   cre_nm               varchar(30) not null default '' comment '������',
-   log_tims             timestamp not null default CURRENT_TIMESTAMP comment 'ʱ���',
-   flow_nm              varchar(30) not null default '' comment '����',
-   id_no                char(32) not null default '' comment '��ʶID',
-   mdu_nm               varchar(30) not null default '' comment 'ģ��',
-   step_seq             int not null default 0 comment '���',
-   log_lvl              varchar(30) not null default '' comment '����',
-   log_cont             varchar(100) not null default '' comment '����',
-   step_sts             varchar(10) not null default '' comment '״̬',
+   id                   int not null auto_increment comment '主键id',
+   log_tims             timestamp not null default CURRENT_TIMESTAMP comment '记录时间',
+   id_no                char(32) not null default '' comment '关联ID',
+   step_seq             int not null default 0 comment '步骤序号',
+   log_lvl              varchar(10) not null default '' comment '日志级别',
+   log_cont             varchar(500) not null default '' comment '日志内容',
+   step_sts             varchar(10) not null default '' comment '步骤状态',
    primary key (id)
 );
 
-alter table dwadb.dwa_log_info comment '��־��¼��';
+alter table tab_log_info comment '日志记录表';
