@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper  namespace="com.springboot.dao.JobDao">
-    <resultMap type="com.springboot.entity.JobInfo" id="jobResultMap">
+<mapper  namespace="com.grouptech.dao.JobDao">
+    <resultMap type="com.grouptech.entity.JobInfo" id="jobResultMap">
         <id property="jobId" column="job_id" jdbcType="CHAR"/>
         <result property="jobNm" column="job_nm" jdbcType="VARCHAR"/>
         <result property="creNm" column="cre_nm" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
         <result property="lstModDt" column="lst_mod_dt" jdbcType="TIMESTAMP"/>
         <result property="logPath" column="log_path" jdbcType="VARCHAR"/>
     </resultMap>
-    <select id="selectJobByIf" parameterType="com.springboot.entity.JobInfo" resultMap="jobResultMap">
+    <select id="selectJobByIf" parameterType="com.grouptech.entity.JobInfo" resultMap="jobResultMap">
         select * from dwa_spark_job_info where 1=1
         <if test="jobInfo.jobId !=null">
             and job_id=#{job.jobId}
@@ -46,13 +46,13 @@
         select * from dwa_spark_job_info
     </select>
     <!-- 添加数据信息 -->
-    <insert id="insertJob" parameterType="com.springboot.entity.JobInfo">
+    <insert id="insertJob" parameterType="com.grouptech.entity.JobInfo">
         insert into  dwa_spark_job_info(job_id,job_nm,cre_nm,job_typ,job_ver,jar_path,spark_mode,main_class,app_args,log_path)
         values (#{jobInfo.jobId},#{jobInfo.jobNm},#{jobInfo.creNm},#{jobInfo.jobTyp},#{jobInfo.jobVer},#{jobInfo.jarPath},
                 #{jobInfo.sparkMode},#{jobInfo.mainClass},#{jobInfo.appArgs},#{jobInfo.logPath})
     </insert>
     <!-- 更新数据信息 -->
-    <update id="updateJob" parameterType="com.springboot.entity.JobInfo">
+    <update id="updateJob" parameterType="com.grouptech.entity.JobInfo">
         update dwa_spark_job_info set job_ver=#{jobInfo.jobVer},jar_path=#{jobInfo.jarPath},spark_mode=#{jobInfo.sparkMode},main_class=#{jobInfo.mainClass},app_args=#{jobInfo.appArgs},log_path=#{jobInfo.logPath}
         where job_id=#{jobInfo.jobId}
     </update>
